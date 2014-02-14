@@ -5,7 +5,7 @@ Author URI: http://novaksolutions.com/
 Plugin URI: http://novaksolutions.com/wordpress-plugins/infusionsoft-exit-optin/
 Requires at least: 2.7
 Tested up to: 3.8
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ pop-up the web form optin form in a non-obtrusive way.
 Yes, you will need to provide your Infusionsoft API key.
 
 == Changelog ==
+
+= 1.0.2 =
+* Removed reference to non-existant JS file
 
 = 1.0.1 =
 * Fix to allow multi-line web form names

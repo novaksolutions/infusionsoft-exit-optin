@@ -5,16 +5,6 @@ global $novaksolutions_exit_webforms;
 add_action('admin_menu', 'novaksolutions_exit_add_admin_menu');
 add_action('admin_init', 'novaksolutions_exit_admin_init');
 
-function novaksolutions_exit_plugin_scripts() {
-    wp_enqueue_script(
-        'custom-script',
-        get_stylesheet_directory_uri() . '/js/custom_script.js',
-        array( 'jquery' )
-    );
-}
-
-add_action( 'wp_enqueue_scripts', 'novaksolutions_exit_plugin_scripts' );
-
 function novaksolutions_exit_plugin_action_links( $links, $file ) {
     if ( $file == plugin_basename( dirname(__FILE__).'/infusionsoft-exit-optin.php' ) ) {
         $links[] = '<a href="' . admin_url( 'admin.php?page=novaksolutions_exit_admin_menu' ) . '">'.__( 'Settings' ).'</a>';
