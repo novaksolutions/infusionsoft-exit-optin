@@ -212,8 +212,13 @@ function novaksolutions_exit_get_webforms(){
         $webform = str_replace("\r\n", "\n", $webform);
         $webform = unserialize($webform);
         if(isset($webform['id'])){
-            $js = Infusionsoft_WebFormService::getHostedURL($webform['id']);
-            update_option( 'novaksolutions_exit_web_form_snippet', $js );
+            try {
+                $js = Infusionsoft_WebFormService::getHostedURL($webform['id']);
+                update_option( 'novaksolutions_exit_web_form_snippet', $js );
+            } catch(Exception $e) {
+                update_option( 'novaksolutions_exit_web_form', '' );
+                update_option( 'novaksolutions_exit_web_form_snippet', '' );
+            }
         }
     }
 

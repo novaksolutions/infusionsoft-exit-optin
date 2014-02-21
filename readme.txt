@@ -4,8 +4,8 @@ Tags: infusionsoft, exit, intent, optin, javascript
 Author URI: http://novaksolutions.com/
 Plugin URI: http://novaksolutions.com/wordpress-plugins/infusionsoft-exit-optin/
 Requires at least: 2.7
-Tested up to: 3.8
-Stable tag: 1.0.2
+Tested up to: 3.8.1
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,11 @@ pop-up the web form optin form in a non-obtrusive way.
 Yes, you will need to provide your Infusionsoft API key.
 
 == Changelog ==
+
+= 1.0.3 =
+* Tested up to 3.8.1
+* Bug fix: Don't throw an error if user switches Infusionsoft apps
+* Bug fix: Don't throw an error if the selected web form is deleted
 
 = 1.0.2 =
 * Removed reference to non-existant JS file

@@ -5,7 +5,7 @@ Plugin Name: Infusionsoft® Exit Optin
 Plugin URI: http://novaksolutions.com/wordpress-plugins/infusionsoft-exit-optin/
 Description: Trigger a web form pop-up when the user's mouse leaves the page.
 Author: Novak Solutions
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://novaksolutions.com/
 */
 
