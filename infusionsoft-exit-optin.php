@@ -1,21 +1,30 @@
 <?php
 
 /*
-Plugin Name: Infusionsoft® Exit Optin
+Plugin Name: Infusionsoft Exit Optin
 Plugin URI: http://novaksolutions.com/wordpress-plugins/infusionsoft-exit-optin/
 Description: Trigger a web form pop-up when the user's mouse leaves the page.
 Author: Novak Solutions
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://novaksolutions.com/
 */
 
-add_action( 'admin_notices', 'novaksolutions_exit_missing_sdk' );
+/**
+ * Check if the SDK is loaded
+ */
 function novaksolutions_exit_missing_sdk() {
     if( !is_plugin_active( 'infusionsoft-sdk/infusionsoft-sdk.php' )){
         echo "<div class=\"error\"><p><strong><em>Infusionsoft Exit Optin</em> requires the <em>Infusionsoft SDK</em> plugin. Please install and activate the <em>Infusionsoft SDK</em> plugin.</strong></p></div>";
     }
 }
+add_action( 'admin_notices', 'novaksolutions_exit_missing_sdk' );
 
+/**
+ * Determine the current user's WP role.
+ *
+ * @global object $current_user
+ * @return int
+ */
 function novaksolutions_exit_get_user_role() {
     global $current_user;
 
@@ -39,8 +48,12 @@ function novaksolutions_exit_get_user_role() {
     }
 }
 
+// Include admin functionality
 include(dirname(__FILE__).'/admin_init.php');
 
+/**
+ * Register and enqueue required JS and CSS files.
+ */
 function novaksolutions_exit_scripts() {
     // CSS
     wp_register_style( 'magnific-popup', plugins_url('css/magnific-popup.css', __FILE__) );
@@ -49,11 +62,14 @@ function novaksolutions_exit_scripts() {
 
     // JS
     wp_register_script( 'magnific-popup', plugins_url('js/magnific-popup.js', __FILE__), array('jquery') );
-    
+
     wp_enqueue_script( 'magnific-popup' );
 }
 add_action( 'wp_enqueue_scripts', 'novaksolutions_exit_scripts' );
 
+/**
+ * Output the popup code to the footer of the page.
+ */
 function novaksolutions_exit_plugin_footer() {
     // Don't spit out optin form code if they haven't selected a web form
     if(!get_option('novaksolutions_exit_web_form_snippet')) return;
@@ -105,16 +121,16 @@ jQuery(document).ready(function() {
     }
 
     novaksolutionsExit.shown = false;
-    
+
     jQuery(document).on("mouseleave", function(){
         if(novaksolutionsExit.shown == false && novaksolutionsExit.readCookie('ns_exit') < <?php echo get_option('novaksolutions_exit_max_views', '1'); ?>) {
             jQuery.magnificPopup.open({
                 items: {
                     src: '<?php echo get_option('novaksolutions_exit_web_form_snippet'); ?>',
                     type: 'iframe'
-                } 
+                }
             });
-           
+
             novaksolutionsExit.createCookie('ns_exit', novaksolutionsExit.increment(), 30);
             novaksolutionsExit.shown = true;
         }

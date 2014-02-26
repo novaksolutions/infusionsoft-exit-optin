@@ -2,18 +2,26 @@
 
 global $novaksolutions_exit_webforms;
 
-add_action('admin_menu', 'novaksolutions_exit_add_admin_menu');
-add_action('admin_init', 'novaksolutions_exit_admin_init');
-
+/**
+ * Add links to plugin listing.
+ *
+ * @param array $links
+ * @param string $file
+ * @return array
+ */
 function novaksolutions_exit_plugin_action_links( $links, $file ) {
     if ( $file == plugin_basename( dirname(__FILE__).'/infusionsoft-exit-optin.php' ) ) {
         $links[] = '<a href="' . admin_url( 'admin.php?page=novaksolutions_exit_admin_menu' ) . '">'.__( 'Settings' ).'</a>';
+        $links[] = '<a href="http://novaksolutions.com/integrations/wordpress/?utm_source=wordpress&utm_medium=link&utm_content=exit-optin&utm_campaign=more-plugins">More Plugins by Novak Solutions</a>';
     }
 
     return $links;
 }
 add_filter('plugin_action_links', 'novaksolutions_exit_plugin_action_links', 10, 2);
 
+/**
+ * Define settings fields.
+ */
 function novaksolutions_exit_admin_init(){
     add_option('novaksolutions_exit_web_form_snippet', '', null, 'no');
 
@@ -72,12 +80,22 @@ function novaksolutions_exit_admin_init(){
     register_setting('novaksolutions-exit-settings', 'novaksolutions_exit_height', 'novaksolutions_exit_sanitize_absint');
     register_setting('novaksolutions-exit-settings', 'novaksolutions_exit_max_views', 'novaksolutions_exit_sanitize_absint');
 }
+add_action('admin_init', 'novaksolutions_exit_admin_init');
 
+/**
+ * Make sure the value is a positive integer.
+ *
+ * @param string $value
+ * @return int
+ */
 function novaksolutions_exit_sanitize_absint($value) {
     $value = absint($value);
     return $value === 0 ? '' : $value;
 }
 
+/**
+ * Display web form dropdown.
+ */
 function novaksolutions_exit_callback_function_web_form() {
     global $novaksolutions_exit_webforms;
 
@@ -97,7 +115,7 @@ function novaksolutions_exit_callback_function_web_form() {
         $current = unserialize($current);
 
         echo "<option value=\"$value\"";
-        
+
         if(isset($current['id']) && $id == $current['id']){
             echo ' selected="selected"';
         }
@@ -108,6 +126,9 @@ function novaksolutions_exit_callback_function_web_form() {
     echo '</select>';
 }
 
+/**
+ * Display web form URL.
+ */
 function novaksolutions_exit_callback_function_web_form_snippet() {
     $snippet = get_option('novaksolutions_exit_web_form_snippet');
     if(!empty($snippet)){
@@ -118,6 +139,9 @@ function novaksolutions_exit_callback_function_web_form_snippet() {
     }
 }
 
+/**
+ * Display minimum role field.
+ */
 function novaksolutions_exit_callback_function_role() {
     global $novaksolutions_exit_webforms;
 
@@ -141,24 +165,42 @@ function novaksolutions_exit_callback_function_role() {
     echo '<span class="description">The Exit Optin will only be shown to visitors that are assigned the minimum role or greater. We recommend setting this to Administrator while testing.</span>';
 }
 
+/**
+ * Display width field.
+ */
 function novaksolutions_exit_callback_function_width() {
     echo '<input type="text" name="novaksolutions_exit_width" value="' . get_option('novaksolutions_exit_width', '500') . '" />px';
 }
 
+/**
+ * Display height field.
+ */
 function novaksolutions_exit_callback_function_height() {
     echo '<input type="text" name="novaksolutions_exit_height" value="' . get_option('novaksolutions_exit_height', '300') . '" />px';
 }
 
+/**
+ * Display max view field.
+ */
 function novaksolutions_exit_callback_function_max_views() {
     echo '<input type="text" name="novaksolutions_exit_max_views" value="' . get_option('novaksolutions_exit_max_views', '1') . '" /><br />';
     echo '<span class="description">How many times should each visitor be allowed to see the Exit Optin pop-up.</span>';
 }
 
+/**
+ * Add settings page to menu.
+ */
 function novaksolutions_exit_add_admin_menu(){
-    add_menu_page( "Infusionsoft® Exit Optin", "Exit Optin", "edit_plugins", "novaksolutions_exit_admin_menu", 'novaksolutions_exit_display_admin_page');
-    add_submenu_page( "novaksolutions_exit_admin_menu", "Infusionsoft® Exit Optin", "Settings", "edit_plugins", "novaksolutions_exit_admin_menu", 'novaksolutions_exit_display_admin_page');
+    add_menu_page( "Infusionsoft Exit Optin", "Exit Optin", "edit_plugins", "novaksolutions_exit_admin_menu", 'novaksolutions_exit_display_admin_page');
+    add_submenu_page( "novaksolutions_exit_admin_menu", "Infusionsoft Exit Optin", "Settings", "edit_plugins", "novaksolutions_exit_admin_menu", 'novaksolutions_exit_display_admin_page');
 }
+add_action('admin_menu', 'novaksolutions_exit_add_admin_menu');
 
+/**
+ * Get list of web forms from Infusionsoft.
+ *
+ * @return array
+ */
 function novaksolutions_exit_get_webforms(){
 
     if( !is_plugin_active( 'infusionsoft-sdk/infusionsoft-sdk.php' )){
@@ -225,15 +267,22 @@ function novaksolutions_exit_get_webforms(){
     return $webforms;
 }
 
+/**
+ * Display links to WP.org and Novak Solutions.
+ */
 function novaksolutions_exit_display_link_back(){
     echo '<h2>Like this plugin?</h2>';
+    echo '<p>If you found this plugin useful, please <a href="http://wordpress.org/support/view/plugin-reviews/infusionsoft-exit-optin">rate it in the plugin directory</a>.</p>';
     echo '<p>Visit <a href="http://novaksolutions.com/?utm_source=wordpress&utm_medium=link&utm_campaign=exit">Novak Solutions</a> to find dozens of free tips, tricks, and tools to help you get the most out of Infusionsoft®.</p>';
 }
 
+/**
+ * Display settings page and link back.
+ */
 function novaksolutions_exit_display_admin_page(){
     global $novaksolutions_exit_webforms;
 
-    echo '<h2>Infusionsoft&reg; Exit Optin Settings</h2>';
+    echo '<h2>Infusionsoft Exit Optin Settings</h2>';
 
     $novaksolutions_exit_webforms = novaksolutions_exit_get_webforms();
     settings_errors();
@@ -246,4 +295,3 @@ function novaksolutions_exit_display_admin_page(){
 
     novaksolutions_exit_display_link_back();
 }
-
