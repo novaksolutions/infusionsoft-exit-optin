@@ -4,7 +4,7 @@ Tags: infusionsoft, exit, intent, optin, javascript
 Author URI: http://novaksolutions.com/
 Plugin URI: http://novaksolutions.com/wordpress-plugins/infusionsoft-exit-optin/
 Requires at least: 2.7
-Tested up to: 3.8.3
+Tested up to: 3.9
 Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
